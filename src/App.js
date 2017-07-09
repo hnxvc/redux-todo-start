@@ -65,6 +65,19 @@ const Todos = ({visibleTodos, toggleTodo, removeTodo}) => {
   )
 }
 
+const TodoAdd = ({txtTodo, onInputChange, addTodo}) => {
+  return(
+    <div>
+      <input type="text"
+        value={txtTodo}
+        onChange={onInputChange}
+      />
+      <button onClick={addTodo}>Add todo</button>
+    </div>
+
+  )
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -131,11 +144,11 @@ class App extends Component {
 
     return (
       <div className="App">
-        <input type="text"
-          value={this.state.txtTodo}
-          onChange={this.onInputChange.bind(this)}
+        <TodoAdd
+          txtTodo={this.state.txtTodo}
+          onInputChange={this.onInputChange.bind(this)}
+          addTodo={this.addTodo.bind(this)}
         />
-        <button onClick={this.addTodo.bind(this)}>Add todo</button>
         <Todos
           visibleTodos={visibleTodos}
           toggleTodo={this.toggleTodo.bind(this)}
