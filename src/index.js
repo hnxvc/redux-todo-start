@@ -17,6 +17,7 @@ const render = () => {
   ReactDOM.render(
     <App
       todos={store.getState().todos}
+      filter={store.getState().filter}
       dispatch={store.dispatch}
     />,
     document.getElementById('root'));

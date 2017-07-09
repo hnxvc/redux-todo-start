@@ -3,8 +3,9 @@ import {
   addTodo, toggleTodo, removeTodo,
   showAllTodo, showCompletedTodo, showActiveTodo
 } from './actions/actions';
-
 import classNames from 'classnames';
+import * as Constants from './constants/general';
+
 const uuidv1 = require('uuid/v1');
 
 class App extends Component {
@@ -53,6 +54,18 @@ class App extends Component {
   }
 
   render() {
+    let todos = this.props.todos;
+    let filter = this.props.filter;
+
+    if(filter === Constants.SHOW_COMPLETED) {
+      todos = todos.filter(todo => {
+        return todo.complete;
+      });
+    } else if (filter === Constants.SHOW_ACTIVE) {
+      todos = todos.filter(todo => {
+        return !todo.complete;
+      });
+    }
 
     return (
       <div className="App">
@@ -63,7 +76,7 @@ class App extends Component {
         <button onClick={this.addTodo.bind(this)}>Add todo</button>
         <ul>
           {
-            this.props.todos.map(todo => {
+            todos.map(todo => {
               let todoClass = classNames(
                 'todo',
                 {'todo--complete': todo.complete}
