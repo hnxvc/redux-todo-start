@@ -11,3 +11,9 @@ body {
 .todo--complete {
   text-decoration: line-through;
 }
+
+.filter .filter__item {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+}

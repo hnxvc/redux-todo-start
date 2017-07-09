@@ -8,6 +8,23 @@ import * as Constants from './constants/general';
 
 const uuidv1 = require('uuid/v1');
 
+const FilterLink = (props) => {
+  if(props.type === props.filter) {
+    return <span>{props.children}</span>
+  }
+  return(
+    <a href="#"
+      className="filter__item"
+      onClick={e => {
+        e.preventDefault();
+        props.onClick();
+      }}
+    >
+      {props.children}
+    </a>
+  )
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -38,34 +55,39 @@ class App extends Component {
     this.props.dispatch(removeTodo(id));
   }
 
-  showAllTodo(e) {
-    e.preventDefault();
+  showAllTodo() {
     this.props.dispatch(showAllTodo());
   }
 
-  showActiveTodo(e) {
-    e.preventDefault();
+  showActiveTodo() {
     this.props.dispatch(showActiveTodo());
   }
 
-  showCompletedTodo(e) {
-    e.preventDefault();
+  showCompletedTodo() {
     this.props.dispatch(showCompletedTodo());
+  }
+
+  getVisibleTodo(filter, todos) {
+    switch(filter) {
+      case Constants.SHOW_ALL:
+        return todos;
+
+      case Constants.SHOW_COMPLETED:
+        return todos.filter(todo => todo.complete);
+
+      case Constants.SHOW_ACTIVE:
+        return todos.filter(todo => !todo.complete);
+
+      default:
+        return todos;
+    }
   }
 
   render() {
     let todos = this.props.todos;
     let filter = this.props.filter;
 
-    if(filter === Constants.SHOW_COMPLETED) {
-      todos = todos.filter(todo => {
-        return todo.complete;
-      });
-    } else if (filter === Constants.SHOW_ACTIVE) {
-      todos = todos.filter(todo => {
-        return !todo.complete;
-      });
-    }
+    const visibleTodos = this.getVisibleTodo(filter, todos);
 
     return (
       <div className="App">
@@ -76,7 +98,7 @@ class App extends Component {
         <button onClick={this.addTodo.bind(this)}>Add todo</button>
         <ul>
           {
-            todos.map(todo => {
+            visibleTodos.map(todo => {
               let todoClass = classNames(
                 'todo',
                 {'todo--complete': todo.complete}
@@ -99,11 +121,28 @@ class App extends Component {
           }
         </ul>
 
-        <div>
+        <div className="filter">
           Show{" "}
-          <a href="#all" onClick={this.showAllTodo.bind(this)}>All</a>{" "}
-          <a href="#active" onClick={this.showActiveTodo.bind(this)}>Active</a>{" "}
-          <a href="#complete" onClick={this.showCompletedTodo.bind(this)}>Complete</a>
+          <FilterLink
+            children="All"
+            onClick={this.showAllTodo.bind(this)}
+            type={Constants.SHOW_ALL}
+            filter={filter}
+          />
+
+          <FilterLink
+            children="Active"
+            onClick={this.showActiveTodo.bind(this)}
+            type={Constants.SHOW_ACTIVE}
+            filter={filter}
+          />
+
+          <FilterLink
+            children="Complete"
+            onClick={this.showCompletedTodo.bind(this)}
+            type={Constants.SHOW_COMPLETED}
+            filter={filter}
+          />
         </div>
 
       </div>
