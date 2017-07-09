@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import logger from 'redux-logger'
+import { addTodo } from './actions/actions';
 
 import rootReducer from './data/reduder';
 
@@ -15,21 +16,11 @@ const store = createStore(
   applyMiddleware(logger)
 );
 
-console.log('REMOVEME ----- store', store.getState());
-
-store.dispatch({
-  type: 'TEST',
-  data: {
-    name: 'Nguyen',
-    age: 20
-  }
-});
-
 class App extends Component {
   render() {
     return (
       <div className="App">
-        
+        <button onClick={()=> store.dispatch(addTodo(1, 'Ve Nha', 0))}>Add todo</button>
       </div>
     );
   }
