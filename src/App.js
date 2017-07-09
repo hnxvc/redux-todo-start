@@ -25,6 +25,46 @@ const FilterLink = (props) => {
   )
 }
 
+const Todo = ({todo, toggleTodo, removeTodo}) => {
+  let todoClass = classNames(
+    'todo',
+    {'todo--complete': todo.complete}
+  );
+  return(
+    <li
+      className={todoClass}
+      key={todo.id}
+      onClick={() => toggleTodo(todo.id)}
+    >
+      {todo.text}
+      <button
+        onClick={() => removeTodo(todo.id)}
+      >
+        x
+      </button>
+    </li>
+  );
+}
+
+const Todos = ({visibleTodos, toggleTodo, removeTodo}) => {
+  return (
+    <ul>
+      {
+        visibleTodos.map(todo => {
+          return (
+            <Todo
+              key={todo.id}
+              todo={todo}
+              toggleTodo={toggleTodo}
+              removeTodo={removeTodo}
+            />
+          );
+        })
+      }
+    </ul>
+  )
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -96,31 +136,11 @@ class App extends Component {
           onChange={this.onInputChange.bind(this)}
         />
         <button onClick={this.addTodo.bind(this)}>Add todo</button>
-        <ul>
-          {
-            visibleTodos.map(todo => {
-              let todoClass = classNames(
-                'todo',
-                {'todo--complete': todo.complete}
-              );
-              return (
-                <li
-                  className={todoClass}
-                  key={todo.id}
-                  onClick={this.toggleTodo.bind(this, todo.id)}
-                >
-                  {todo.text}
-                  <button
-                    onClick={this.removeTodo.bind(this, todo.id)}
-                  >
-                    x
-                  </button>
-                </li>
-              );
-            })
-          }
-        </ul>
-
+        <Todos
+          visibleTodos={visibleTodos}
+          toggleTodo={this.toggleTodo.bind(this)}
+          removeTodo={this.removeTodo.bind(this)}
+        />
         <div className="filter">
           Show{" "}
           <FilterLink
