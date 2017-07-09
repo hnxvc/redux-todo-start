@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { addTodo, toggleTodo, removeTodo } from './actions/actions';
+import {
+  addTodo, toggleTodo, removeTodo,
+  showAllTodo, showCompletedTodo, showActiveTodo
+} from './actions/actions';
+
 import classNames from 'classnames';
 const uuidv1 = require('uuid/v1');
 
@@ -31,6 +35,21 @@ class App extends Component {
 
   removeTodo(id) {
     this.props.dispatch(removeTodo(id));
+  }
+
+  showAllTodo(e) {
+    e.preventDefault();
+    this.props.dispatch(showAllTodo());
+  }
+
+  showActiveTodo(e) {
+    e.preventDefault();
+    this.props.dispatch(showActiveTodo());
+  }
+
+  showCompletedTodo(e) {
+    e.preventDefault();
+    this.props.dispatch(showCompletedTodo());
   }
 
   render() {
@@ -66,6 +85,13 @@ class App extends Component {
             })
           }
         </ul>
+
+        <div>
+          Show{" "}
+          <a href="#all" onClick={this.showAllTodo.bind(this)}>All</a>{" "}
+          <a href="#active" onClick={this.showActiveTodo.bind(this)}>Active</a>{" "}
+          <a href="#complete" onClick={this.showCompletedTodo.bind(this)}>Complete</a>
+        </div>
 
       </div>
     );
