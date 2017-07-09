@@ -19,3 +19,12 @@ export const toggleTodo = (id) => {
     }
   }
 }
+
+export const removeTodo = (id) =>{
+  return {
+    type: ActionTypes.REMOVE_TODO,
+    data: {
+      id
+    }
+  }
+}

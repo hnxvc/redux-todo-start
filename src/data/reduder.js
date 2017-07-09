@@ -20,7 +20,16 @@ const rootReducer = (state = [], action) => {
           ...todo,
           complete: !todo.complete
         }
-      })
+      });
+
+    case ActionTypes.REMOVE_TODO:
+      let index = state.findIndex(todo => todo.id === action.data.id);
+
+      return [
+        ...state.slice(0, index),
+        ...state.slice(index+1)
+      ];
+
     default:
       return state;
   }

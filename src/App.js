@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import logger from 'redux-logger'
-import { addTodo, toggleTodo } from './actions/actions';
+import { addTodo, toggleTodo, removeTodo } from './actions/actions';
 
 import rootReducer from './data/reduder';
 
@@ -22,6 +22,7 @@ class App extends Component {
       <div className="App">
         <button onClick={()=> store.dispatch(addTodo(1, 'Ve Nha', false))}>Add todo</button>
         <button onClick={()=> store.dispatch(toggleTodo(1))}>Toggle todo</button>
+        <button onClick={()=> store.dispatch(removeTodo(1))}>Remove todo</button>
       </div>
     );
   }
