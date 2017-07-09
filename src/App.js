@@ -29,8 +29,8 @@ class App extends Component {
     this.props.dispatch(toggleTodo(id));
   }
 
-  removeTodo() {
-    this.props.dispatch(removeTodo(1));
+  removeTodo(id) {
+    this.props.dispatch(removeTodo(id));
   }
 
   render() {
@@ -42,8 +42,6 @@ class App extends Component {
           onChange={this.onInputChange.bind(this)}
         />
         <button onClick={this.addTodo.bind(this)}>Add todo</button>
-        <button onClick={this.removeTodo.bind(this)}>Remove todo</button>
-
         <ul>
           {
             this.props.todos.map(todo => {
@@ -58,6 +56,11 @@ class App extends Component {
                   onClick={this.toggleTodo.bind(this, todo.id)}
                 >
                   {todo.text}
+                  <button
+                    onClick={this.removeTodo.bind(this, todo.id)}
+                  >
+                    x
+                  </button>
                 </li>
               );
             })
