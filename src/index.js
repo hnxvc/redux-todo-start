@@ -4,5 +4,25 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { createStore, applyMiddleware } from 'redux';
+import logger from 'redux-logger'
+import rootReducer from './data/reduder';
+
+const store = createStore(
+  rootReducer,
+  applyMiddleware(logger)
+);
+
+const render = () => {
+  ReactDOM.render(
+    <App
+      todos={store.getState().todos}
+      dispatch={store.dispatch}
+    />,
+    document.getElementById('root'));
+};
+
+store.subscribe(render);
+render();
+
 registerServiceWorker();
