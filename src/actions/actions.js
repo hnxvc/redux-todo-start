@@ -10,3 +10,12 @@ export const addTodo = (id, text, complete) => {
     }
   }
 }
+
+export const toggleTodo = (id) => {
+  return {
+    type: ActionTypes.TOGGLE_TODO,
+    data: {
+      id
+    }
+  }
+}
