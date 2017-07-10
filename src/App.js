@@ -78,6 +78,36 @@ const TodoAdd = ({txtTodo, onInputChange, addTodo}) => {
   )
 }
 
+const Footer = (
+  { filter, showAllTodo, showActiveTodo, showCompletedTodo }
+) => {
+  return(
+    <div className="filter">
+      Show{" "}
+      <FilterLink
+        children="All"
+        onClick={showAllTodo}
+        type={Constants.SHOW_ALL}
+        filter={filter}
+      />
+
+      <FilterLink
+        children="Active"
+        onClick={showActiveTodo}
+        type={Constants.SHOW_ACTIVE}
+        filter={filter}
+      />
+
+      <FilterLink
+        children="Complete"
+        onClick={showCompletedTodo}
+        type={Constants.SHOW_COMPLETED}
+        filter={filter}
+      />
+    </div>
+  );
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -154,30 +184,12 @@ class App extends Component {
           toggleTodo={this.toggleTodo.bind(this)}
           removeTodo={this.removeTodo.bind(this)}
         />
-        <div className="filter">
-          Show{" "}
-          <FilterLink
-            children="All"
-            onClick={this.showAllTodo.bind(this)}
-            type={Constants.SHOW_ALL}
-            filter={filter}
-          />
-
-          <FilterLink
-            children="Active"
-            onClick={this.showActiveTodo.bind(this)}
-            type={Constants.SHOW_ACTIVE}
-            filter={filter}
-          />
-
-          <FilterLink
-            children="Complete"
-            onClick={this.showCompletedTodo.bind(this)}
-            type={Constants.SHOW_COMPLETED}
-            filter={filter}
-          />
-        </div>
-
+        <Footer
+          filter={filter}
+          showAllTodo={this.showAllTodo.bind(this)}
+          showActiveTodo={this.showActiveTodo.bind(this)}
+          showCompletedTodo={this.showCompletedTodo.bind(this)}
+        />
       </div>
     );
   }
