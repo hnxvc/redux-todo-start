@@ -7,27 +7,27 @@ import PropTypes from 'prop-types';
 import { createStore, applyMiddleware } from 'redux';
 import logger from 'redux-logger'
 import rootReducer from './data/reduder';
-// import { Provider } from 'react-redux';
+import { Provider } from 'react-redux';
 
 const store = createStore(
   rootReducer,
   applyMiddleware(logger)
 );
 
-class Provider extends Component {
-
-  getChildContext() {
-    return {store: this.props.store};
-  }
-
-  render() {
-    return this.props.children;
-  }
-}
-
-Provider.childContextTypes = {
-  store: PropTypes.object
-}
+// class Provider extends Component {
+//
+//   getChildContext() {
+//     return {store: this.props.store};
+//   }
+//
+//   render() {
+//     return this.props.children;
+//   }
+// }
+//
+// Provider.childContextTypes = {
+//   store: PropTypes.object
+// }
 
 const render = () => {
   ReactDOM.render(
