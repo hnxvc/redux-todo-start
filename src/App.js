@@ -6,6 +6,8 @@ import {
 import classNames from 'classnames';
 import * as Constants from './constants/general';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 const uuidv1 = require('uuid/v1');
 
 const FilterLink = (props) => {
@@ -123,46 +125,7 @@ class App extends Component {
     });
   }
 
-  removeTodo(id) {
-    this.props.dispatch(removeTodo(id));
-  }
-
-  showAllTodo() {
-    this.props.dispatch(showAllTodo());
-  }
-
-  showActiveTodo() {
-    this.props.dispatch(showActiveTodo());
-  }
-
-  showCompletedTodo() {
-    this.props.dispatch(showCompletedTodo());
-  }
-
-  getVisibleTodo(filter, todos) {
-    switch(filter) {
-      case Constants.SHOW_ALL:
-        return todos;
-
-      case Constants.SHOW_COMPLETED:
-        return todos.filter(todo => todo.complete);
-
-      case Constants.SHOW_ACTIVE:
-        return todos.filter(todo => !todo.complete);
-
-      default:
-        return todos;
-    }
-  }
-
   render() {
-    const { store } = this.context;
-
-    let todos = store.getState().todos;
-    let filter = store.getState().filter;
-
-    const visibleTodos = this.getVisibleTodo(filter, todos);
-
     return (
       <div className="App">
         <TodoAdd
@@ -170,7 +133,7 @@ class App extends Component {
           onInputChange={this.onInputChange.bind(this)}
           addTodo={
             () => {
-              store.dispatch(addTodo(uuidv1(), this.state.txtTodo, false)) ;
+              this.props.addTodo(uuidv1(), this.state.txtTodo, false) ;
               this.setState({
                 txtTodo: ''
               });
@@ -178,24 +141,24 @@ class App extends Component {
           }
         />
         <Todos
-          visibleTodos={visibleTodos}
+          visibleTodos={this.props.todos}
           toggleTodo={(id) => {
-            store.dispatch(toggleTodo(id));
+            this.props.toggleTodo(id);
           }}
           removeTodo={(id) => {
-            store.dispatch(removeTodo(id));
+            this.props.removeTodo(id);
           }}
         />
         <Footer
-          filter={filter}
+          filter={this.props.filter}
           showAllTodo={() => {
-            store.dispatch(showAllTodo());
+            this.props.showAllTodo();
           }}
           showActiveTodo={() => {
-            store.dispatch(showActiveTodo());
+            this.props.showActiveTodo();
           }}
           showCompletedTodo={() => {
-            store.dispatch(showCompletedTodo());
+            this.props.showCompletedTodo();
           }}
         />
       </div>
@@ -203,8 +166,61 @@ class App extends Component {
   }
 }
 
-App.contextTypes = {
-  store: PropTypes.object
+const getVisibleTodo = (filter, todos) => {
+  switch(filter) {
+    case Constants.SHOW_ALL:
+      return todos;
+
+    case Constants.SHOW_COMPLETED:
+      return todos.filter(todo => todo.complete);
+
+    case Constants.SHOW_ACTIVE:
+      return todos.filter(todo => !todo.complete);
+
+    default:
+      return todos;
+  }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    todos: getVisibleTodo(
+      state.filter,
+      state.todos
+    ),
+
+    filter : state.filter
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTodo : (id, txtTodo, completed) => {
+      dispatch(addTodo(id, txtTodo, completed)) ;
+    },
+
+    toggleTodo : id => {
+      dispatch(toggleTodo(id));
+    },
+
+    removeTodo: id => {
+      dispatch(removeTodo(id));
+    },
+
+    showAllTodo: () => {
+      dispatch(showAllTodo());
+    },
+
+    showActiveTodo: () => {
+      dispatch(showActiveTodo());
+    },
+
+    showCompletedTodo: () => {
+      dispatch(showCompletedTodo());
+    }
+  }
+}
+
+const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default AppContainer;
